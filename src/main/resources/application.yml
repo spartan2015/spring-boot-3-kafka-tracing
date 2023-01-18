@@ -1,0 +1,28 @@
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+      group-id: group_id
+  sleuth:
+    otel:
+      config:
+        trace-id-ratio-based: 1.0
+      exporter:
+        otlp:
+          endpoint: http://localhost:4317
+  application:
+    name: boot3
+  otel:
+    exporter:
+      otlp:
+        endpoint: http://localhost:4317
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://localhost:4317
