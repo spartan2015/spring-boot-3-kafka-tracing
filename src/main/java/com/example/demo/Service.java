@@ -15,16 +15,24 @@ public class Service {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @KafkaListener(topics = "input", groupId = "group_id")
+    @Autowired
+    TransactionalService transactionalService;
+
+    @KafkaListener(topics = "input", groupId = "group_id", errorHandler = "errorHandler")
     @Transactional
     public void receive(ConsumerRecord<?, ?> consumerRecord) {
         LOGGER.info("received data='{}'", consumerRecord.toString());
         String key = (String)consumerRecord.key();
 
- /*   if (Random.from(RandomGenerator.getDefault()).nextInt() % 3 == 0){
-      throw new RuntimeException("fail");
-    }
-*/
+      /*  if (true){
+            throw new RuntimeException("my ex");
+        }*/
+
+        //transactionalService.doService();
         kafkaTemplate.send("output", key, (String)consumerRecord.value());
+       /* kafkaTemplate.executeInTransaction(kafkaTemplate ->{
+
+            return null;
+        });*/
     }
 }
